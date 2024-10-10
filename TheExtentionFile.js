@@ -210,3 +210,111 @@ class Thebloxers998sTools {
 }
 
 Scratch.extensions.register(new Thebloxers998sTools());
+(function(Scratch) {
+    'use strict';
+
+    const extensionId = 'wiiRemoteExtension';
+
+    class WiiRemoteExtension {
+        constructor() {
+            this.remote = {
+                a: false,
+                b: false,
+                up: false,
+                down: false,
+                left: false,
+                right: false,
+                home: false,
+                motionX: 0,
+                motionY: 0,
+                motionZ: 0
+            };
+        }
+
+        getInfo() {
+            return {
+                id: extensionId,
+                name: 'Wii Remote',
+                blocks: [
+                    {
+                        opcode: 'pressButton',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'press [BUTTON]',
+                        arguments: {
+                            BUTTON: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'buttonMenu',
+                            }
+                        }
+                    },
+                    {
+                        opcode: 'isButtonPressed',
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: '[BUTTON] pressed?',
+                        arguments: {
+                            BUTTON: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'buttonMenu',
+                            }
+                        }
+                    },
+                    {
+                        opcode: 'setMotion',
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: 'set motion X [X] Y [Y] Z [Z]',
+                        arguments: {
+                            X: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 0
+                            },
+                            Y: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 0
+                            },
+                            Z: {
+                                type: Scratch.ArgumentType.NUMBER,
+                                defaultValue: 0
+                            }
+                        }
+                    },
+                    {
+                        opcode: 'getMotion',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'motion [AXIS]',
+                        arguments: {
+                            AXIS: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'axisMenu',
+                            }
+                        }
+                    }
+                ],
+                menus: {
+                    buttonMenu: ['a', 'b', 'up', 'down', 'left', 'right', 'home'],
+                    axisMenu: ['X', 'Y', 'Z']
+                }
+            };
+        }
+
+        pressButton({ BUTTON }) {
+            this.remote[BUTTON] = true;
+            setTimeout(() => this.remote[BUTTON] = false, 500); // simulate button press
+        }
+
+        isButtonPressed({ BUTTON }) {
+            return this.remote[BUTTON];
+        }
+
+        setMotion({ X, Y, Z }) {
+            this.remote.motionX = X;
+            this.remote.motionY = Y;
+            this.remote.motionZ = Z;
+        }
+
+        getMotion({ AXIS }) {
+            return this.remote[`motion${AXIS}`];
+        }
+    }
+
+    Scratch.extensions.register(new WiiRemoteExtension());
+})(Scratch);
